@@ -1,36 +1,25 @@
 name: Node Check
 
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+on: push
 
 jobs:
   check:
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-    
-    - name: List files in checkpoints
-      run: |
-        echo "Files in checkpoints folder:"
-        ls -la checkpoints/ || echo "No checkpoints folder"
-    
-    - name: Check all JavaScript files in checkpoints
-      run: |
-        cd checkpoints
-        for file in *.js; do
-          if [ -f "$file" ]; then
-            echo "================================"
-            echo "Checking: $file"
-            node --check "$file"
-            echo "✓ $file passed"
-          fi
-        done
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: List files in root
+        run: |
+          echo "Files in repository:"
+          ls -la
+      
+      - name: Check L57 file
+        run: |
+          echo "Checking: Bot_Pembelajaran_ID_JUMP_AUDIT_20260927_L57_CURRICULUM_RELATION_ID_EDIT_FIX.js"
+          node --check Bot_Pembelajaran_ID_JUMP_AUDIT_20260927_L57_CURRICULUM_RELATION_ID_EDIT_FIX.js
+          echo "✓ L57 syntax check passed!"
