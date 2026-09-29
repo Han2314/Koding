@@ -1,0 +1,36 @@
+name: Node Check
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: List files in checkpoints
+      run: |
+        echo "Files in checkpoints folder:"
+        ls -la checkpoints/ || echo "No checkpoints folder"
+    
+    - name: Check all JavaScript files in checkpoints
+      run: |
+        cd checkpoints
+        for file in *.js; do
+          if [ -f "$file" ]; then
+            echo "================================"
+            echo "Checking: $file"
+            node --check "$file"
+            echo "✓ $file passed"
+          fi
+        done
